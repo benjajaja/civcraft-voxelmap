@@ -1,11 +1,11 @@
 BIOME_COLOR_MAP = {
-	0: (0, 0, 112, 255),		# Ocean
+	0: (31, 45, 167, 255),		# Ocean
 	1: (141, 179, 96, 255),		# Plains
 	2: (250, 148, 24, 255),		# Desert
 	3: (96, 96, 96, 255),		# Extreme Hills
 	4: (5, 102, 33, 255),		# Forest
 	5: (11, 102, 89, 255),		# Taiga
-	6: (7, 249, 178, 255),		# Swampland
+	6: (7, 97, 12, 255),		# Swampland
 	7: (0, 0, 255, 255),		# River
 	8: (255, 0, 0, 255),		# Nether
 	9: (128, 128, 255, 255),	# End
@@ -20,9 +20,9 @@ BIOME_COLOR_MAP = {
 	18: (34, 85, 28, 255),		# Forest Hills
 	19: (22, 57, 51, 255),		# Taiga Hills
 	20: (114, 120, 154, 255),	# Extreme Hills Edge
-	21: (83, 123, 9, 255),		# Jungle
-	22: (44, 66, 5, 255),		# Jungle Hills
-	23: (98, 139, 23, 255),		# Jungle Edge
+	21: (102, 235, 0, 255),		# Jungle
+	22: (148, 255, 66, 255),	# Jungle Hills
+	23: (107, 209, 29, 255),	# Jungle Edge
 	24: (0, 0, 48, 255),		# Deep Ocean
 	25: (162, 162, 132, 255),	# Stone Beach
 	26: (250, 240, 192, 255),	# Cold Beach
@@ -46,7 +46,7 @@ BIOME_COLOR_MAP = {
 	158: (89, 125, 114, 255),	# Cold Taiga M
 	132: (45, 142, 73, 255),	# Flower Forest
 	151: (138, 179, 63, 255),	# Jungle Edge M
-	134: (47, 255, 218, 255),	# Swampland M
+	134: (47, 255, 67, 255),	# Swampland M
 	133: (51, 142, 129, 255),	# Taiga M
 	160: (129, 142, 121, 255),	# Mega Spruce Taiga
 	130: (255, 188, 64, 255),	# Desert M
