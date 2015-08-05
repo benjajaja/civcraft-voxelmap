@@ -1,2 +1,4 @@
 sources/*
-
+biomes/*
+height/*
+*.pyc
