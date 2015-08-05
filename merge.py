@@ -184,7 +184,9 @@ def getPixels(bytes):
 	for x in range(0, 256):
 		row = [];
 		for y in range(0, 256):
-			if bytes[index + 8] == 0: # highest rain blocking block cannot be AIR, it means there is no data
+			if bytes[index + 8] == 0 or bytes[index + BIOME_INDEX] == 28:
+				 # highest rain blocking block cannot be AIR, it means there is no data
+				 # if biome is 28 "Birch Forest Hills", that biome doesn't exist on civcraft and is weird imported data
 				color = (0, 0, 0, 0);
 			else:
 				color = getColor(bytes, index);
