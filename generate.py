@@ -11,6 +11,10 @@ import palettes
 dir = "master";
 
 BIOME_INDEX = 16;
+HEIGHT_INDEX = 0;
+SEA_FLOOR_INDEX = 4;
+BLOCKID_INDEX = 2;
+BLOCKDATA_INDEX = 1;
 
 if os.path.exists("biomes"):
 	shutil.rmtree("biomes")
@@ -18,6 +22,9 @@ os.makedirs("biomes");
 if os.path.exists("height"):
 	shutil.rmtree("height")
 os.makedirs("height");
+if os.path.exists("surface"):
+	shutil.rmtree("surface")
+os.makedirs("surface");
 
 # Layer 1: Highest Partially light blocking block (inlcuding lava) 
 # 00 - Height (0-255) (java byte = -128 to 127 so value is bitwise-anded with 255) 
@@ -44,16 +51,29 @@ os.makedirs("height");
 # 15 -
 
 # 16 - Biome ID
-def getColor(bytes, maptype, x, y):
 
+def surface(bytes):
+	id = str(bytes[BLOCKID_INDEX])
+	if id in palettes.PALETTE:
+		return palettes.PALETTE[id]
+	else:
+		if not id + ":" + str(bytes[BLOCKDATA_INDEX]) in palettes.PALETTE:
+			print "unknown block: %s" % id + ":" + str(bytes[BLOCKDATA_INDEX])
+			return palettes.PALETTE["0"]
+		else:
+			return palettes.PALETTE[id + ":" + str(bytes[BLOCKDATA_INDEX])]
+
+def getColor(bytes, maptype):
 	if maptype == "biomes":
 		return palettes.BIOME_COLOR_MAP[bytes[BIOME_INDEX]]
+	elif maptype == "surface":
+		return surface(bytes)
 	else: # heightmap
-		if bytes[2] == 9 or bytes[2] == 8: # water
+		if bytes[BLOCKID_INDEX] == 9 or bytes[BLOCKID_INDEX] == 8: # water
 			# in theory, we could encode both surface height and depth in the color
-			return (max(0, bytes[0] - 64), 0, min(255, bytes[4] * 4), 255)
+			return (max(0, bytes[HEIGHT_INDEX] - 64), 0, min(255, bytes[SEA_FLOOR_INDEX] * 4), 255)
 		else:
-			return (max(0, bytes[0] * 2 - 256), min(255, bytes[0] * 2), 0, 255)
+			return (max(0, bytes[HEIGHT_INDEX] * 2 - 256), min(255, bytes[HEIGHT_INDEX] * 2), 0, 255)
 
 def getPixels(bytes, maptype):
 	pixels = []
@@ -66,7 +86,7 @@ def getPixels(bytes, maptype):
 				 # if biome is 28 "Birch Forest Hills", that biome doesn't exist on civcraft and is weird imported data
 				color = (0, 0, 0, 0)
 			else:
-				color = getColor(bytes[index:index + 17], maptype, x, y)
+				color = getColor(bytes[index:index + 17], maptype)
 
 			index += 17
 			row.append(color)
@@ -83,7 +103,7 @@ def update_progress(progress):
 
 size = 60
 for y in range(size * -1, size):
-	update_progress(float(y + size + 1) / (size * 2))
+	# update_progress(float(y + size + 1) / (size * 2))
 	for x in range(size * -1, size):
 
 		source = "%s/%d,%d.zip" % (dir, x, y);
@@ -94,7 +114,9 @@ for y in range(size * -1, size):
 		bytes = bytearray();
 		bytes.extend(string)
 
-		for maptype in ["biomes", "height"]:
+		# maptypes = ["biomes", "height"]
+		maptypes = ["surface"]
+		for maptype in maptypes:
 			dest = "%s/%d,%d.png" % (maptype, x, y);
 
 			pixels = getPixels(bytes, maptype);
